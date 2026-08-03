@@ -31,6 +31,7 @@ export interface Profile {
   avatar_url: string | null
   bio: string | null
   theme_id: string | null
+  theme?: ThemePalette | Theme | string | null
   visitor_log_opt_in: boolean
   created_at: string
 }
@@ -58,9 +59,11 @@ export interface Scrap {
   author_id: string
   recipient_id: string
   type: ScrapType
-  content: string | null
-  media_url: string | null
-  transcript: string | null
+  content?: string | null
+  media_url?: string | null
+  transcript?: string | null
+  mood?: string | null
+  decorations?: Json
   created_at: string
 }
 
@@ -69,16 +72,17 @@ export interface Testimonial {
   author_id: string
   recipient_id: string
   content: string
-  status: TestimonialStatus
-  ai_assisted: boolean
+  status?: TestimonialStatus
+  ai_assisted?: boolean
+  traits?: string[]
   created_at: string
-  approved_at: string | null
+  approved_at?: string | null
 }
 
 export interface Reaction {
   id: string
-  scrap_id: string | null
-  testimonial_id: string | null
+  scrap_id?: string | null
+  testimonial_id?: string | null
   user_id: string
   vibe: VibeType
 }
@@ -86,8 +90,8 @@ export interface Reaction {
 export interface Community {
   id: string
   name: string
-  description: string | null
-  banner_url: string | null
+  description?: string | null
+  banner_url?: string | null
   creator_id: string
   created_at: string
 }
@@ -95,8 +99,8 @@ export interface Community {
 export interface CommunityMember {
   community_id: string
   user_id: string
-  role: CommunityRole
-  joined_at: string
+  role?: CommunityRole
+  joined_at?: string
 }
 
 export interface CommunityPost {
@@ -104,7 +108,7 @@ export interface CommunityPost {
   community_id: string
   author_id: string
   content: string
-  media_url: string | null
+  media_url?: string | null
   created_at: string
 }
 
@@ -177,7 +181,7 @@ export type Database = {
       testimonials: { Row: Testimonial; Insert: Omit<Testimonial, 'id' | 'created_at' | 'approved_at'>; Update: Partial<Testimonial> }
       reactions: { Row: Reaction; Insert: Omit<Reaction, 'id'>; Update: Partial<Reaction> }
       communities: { Row: Community; Insert: Omit<Community, 'id' | 'created_at'>; Update: Partial<Community> }
-      community_members: { Row: CommunityMember; Insert: CommunityMember; Update: Partial<CommunityMember> }
+      community_members: { Row: CommunityMember; Insert: Omit<CommunityMember, 'joined_at'> & { joined_at?: string }; Update: Partial<CommunityMember> }
       community_posts: { Row: CommunityPost; Insert: Omit<CommunityPost, 'id' | 'created_at'>; Update: Partial<CommunityPost> }
       profile_visits: { Row: ProfileVisit; Insert: Omit<ProfileVisit, 'id' | 'created_at'>; Update: never }
       notifications: { Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>; Update: Partial<Notification> }

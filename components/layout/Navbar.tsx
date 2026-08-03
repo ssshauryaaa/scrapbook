@@ -202,16 +202,14 @@ export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}
 
           {/* right side: CTA + mobile toggle */}
           <div className="flex items-center gap-2 shrink-0">
-            <motion.a
-              href="/new"
-              whileHover={reducedMotion ? undefined : { scale: 1.04, boxShadow: "0 8px 18px rgba(108,92,231,0.35)" }}
-              whileTap={reducedMotion ? undefined : { scale: 0.95 }}
+            <Link
+              href="/create"
               className="scrapbook-nav-link hidden sm:inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-white"
               style={{ background: tokens.color.periwinkle }}
             >
               <Plus size={15} strokeWidth={2.4} />
-              new scrap
-            </motion.a>
+              create
+            </Link>
 
             <button
               type="button"
@@ -293,14 +291,14 @@ export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}
                 className="pt-1 mt-1 border-t"
                 style={{ borderColor: "#E4E0D3" }}
               >
-                <a
-                  href="/new"
+                <Link
+                  href="/create"
                   className="scrapbook-nav-link flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-medium text-white mt-2"
                   style={{ background: tokens.color.periwinkle }}
                 >
                   <Plus size={16} strokeWidth={2.4} />
-                  new scrap
-                </a>
+                  create
+                </Link>
               </motion.li>
             </ul>
           </motion.div>

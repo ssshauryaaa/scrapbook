@@ -45,7 +45,7 @@ export default function EditProfilePage() {
   const { overlay: entryOverlay } = useRippleEntry(tokens.color.periwinkle);
   const { trigger: exitToProfile, overlay: exitOverlay } = useRippleExit();
 
-  const theme = resolveTheme(profile?.theme ?? null);
+  const theme = resolveTheme((profile as any)?.theme ?? null);
 
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -303,7 +303,7 @@ export default function EditProfilePage() {
       <div className="relative max-w-xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <button
           type="button"
-          onClick={(e) => profile.username && exitToProfile(e, `/${profile.username}`, theme.primary)}
+          onClick={(e) => profile?.username && exitToProfile(e, `/${profile.username}`, theme.primary)}
           className="inline-flex items-center gap-1.5 text-sm mb-6 hover:opacity-70 transition-opacity"
           style={{ color: tokens.color.inkSoft }}
         >

@@ -9,26 +9,26 @@
    ============================================================ */
 :root {
   /* Brand Colors */
-  --color-bg:          #0d0d0f;
-  --color-bg-2:        #141417;
-  --color-bg-3:        #1c1c20;
-  --color-surface:     rgba(255,255,255,0.04);
-  --color-surface-2:   rgba(255,255,255,0.07);
-  --color-border:      rgba(255,255,255,0.08);
-  --color-border-2:    rgba(255,255,255,0.14);
+  --color-bg:          #FAF6EC;
+  --color-bg-2:        #F0EADA;
+  --color-bg-3:        #E4E0D3;
+  --color-surface:     rgba(43,42,40,0.04);
+  --color-surface-2:   rgba(43,42,40,0.07);
+  --color-border:      rgba(43,42,40,0.08);
+  --color-border-2:    rgba(43,42,40,0.14);
 
-  --color-primary:     #c084fc;   /* violet-400 */
-  --color-primary-d:   #a855f7;   /* violet-500 */
-  --color-primary-glow:rgba(192,132,252,0.25);
-  --color-secondary:   #38bdf8;   /* sky-400 */
-  --color-accent:      #fb923c;   /* orange-400 */
-  --color-success:     #4ade80;   /* green-400 */
+  --color-primary:     #6C5CE7;   /* periwinkle */
+  --color-primary-d:   #4A3FC7;   /* periwinkleDark */
+  --color-primary-glow:rgba(108,92,231,0.25);
+  --color-secondary:   #FF6F91;   /* pink */
+  --color-accent:      #FFC857;   /* amber */
+  --color-success:     #4ECDC4;   /* mint */
   --color-danger:      #f87171;   /* red-400 */
-  --color-warning:     #fbbf24;   /* amber-400 */
+  --color-warning:     #FFC857;   /* amber */
 
-  --color-text:        #f4f4f5;
-  --color-text-2:      #a1a1aa;
-  --color-text-3:      #71717a;
+  --color-text:        #2B2A28;   /* ink */
+  --color-text-2:      #6B6860;   /* inkSoft */
+  --color-text-3:      #8A867C;
 
   /* Typography */
   --font-sans:   'Inter', 'Outfit', system-ui, sans-serif;
