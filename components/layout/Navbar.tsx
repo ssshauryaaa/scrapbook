@@ -58,11 +58,20 @@ const LINKS = [
   { href: "/profile", label: "profile", icon: User },
 ];
 
-export default function Navbar() {
+export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+
+  // Optimistic active-link state: updates the instant a link is clicked so
+  // the pill starts sliding right away, instead of waiting for the route
+  // change to finish and pathname to catch up. Re-synced from the real
+  // pathname on mount and on browser back/forward.
+  const [activeHref, setActiveHref] = useState(pathname);
+  useEffect(() => {
+    setActiveHref(pathname);
+  }, [pathname]);
 
   useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -141,12 +150,13 @@ export default function Navbar() {
           {/* desktop links */}
           <ul className="hidden md:flex items-center gap-1 relative">
             {LINKS.map((link) => {
-              const active = pathname === link.href;
+              const active = activeHref === link.href;
               const Icon = link.icon;
               return (
                 <li key={link.href} className="relative">
                   <Link
                     href={link.href}
+                    onClick={() => setActiveHref(link.href)}
                     className="scrapbook-nav-link relative z-10 flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm transition-colors"
                     style={{
                       color: active ? "#fff" : tokens.color.inkSoft,
@@ -156,7 +166,7 @@ export default function Navbar() {
                     {active && (
                       <motion.span
                         layoutId="nav-active-pill"
-                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.7 }}
                         className="absolute inset-0 rounded-full -z-10"
                         style={{ background: tokens.color.periwinkle }}
                       />
@@ -229,7 +239,7 @@ export default function Navbar() {
 
             <ul className="flex flex-col p-2">
               {LINKS.map((link, i) => {
-                const active = pathname === link.href;
+                const active = activeHref === link.href;
                 const Icon = link.icon;
                 return (
                   <motion.li
@@ -237,16 +247,25 @@ export default function Navbar() {
                     initial={reducedMotion ? false : { opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: reducedMotion ? 0 : i * 0.05 }}
+                    className="relative"
                   >
                     <Link
                       href={link.href}
-                      className="scrapbook-nav-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm relative"
+                      onClick={() => setActiveHref(link.href)}
+                      className="scrapbook-nav-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm relative overflow-hidden"
                       style={{
-                        color: active ? tokens.color.periwinkleDark : tokens.color.ink,
-                        background: active ? `${tokens.color.periwinkle}1a` : "transparent",
+                        color: active ? "#fff" : tokens.color.ink,
                         fontWeight: active ? 600 : 500,
                       }}
                     >
+                      {active && (
+                        <motion.span
+                          layoutId="nav-active-pill-mobile"
+                          transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.7 }}
+                          className="absolute inset-0 -z-10"
+                          style={{ background: tokens.color.periwinkle }}
+                        />
+                      )}
                       <Icon size={17} strokeWidth={2.2} />
                       <span className="capitalize">{link.label}</span>
                       {link.badge && (
@@ -282,7 +301,7 @@ export default function Navbar() {
       </AnimatePresence>
 
       {/* spacer so page content doesn't sit under the floating nav */}
-      <div style={{ height: scrolled ? 76 : 92 }} aria-hidden />
+      {!noSpacer && <div style={{ height: scrolled ? 76 : 92 }} aria-hidden />}
     </>
   );
 }
