@@ -1,0 +1,59 @@
+.card {
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  transition: border-color var(--duration-base);
+}
+.card:hover { border-color: var(--color-border-2); }
+.pendingCard { border-left: 3px solid var(--color-primary); }
+
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3); }
+.authorLink { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; }
+.authorName { font-size: var(--text-sm); font-weight: 600; color: var(--color-text); }
+.time { font-size: var(--text-xs); color: var(--color-text-3); }
+
+.aiBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: rgba(192,132,252,0.12);
+  border: 1px solid rgba(192,132,252,0.25);
+  border-radius: var(--radius-full);
+  padding: 0.15em 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.content {
+  font-size: var(--text-sm);
+  color: var(--color-text-2);
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--color-border-2);
+}
+
+.actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); }
+
+.vibes { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.vibeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background var(--duration-base), border-color var(--duration-base);
+}
+.vibeBtn:hover:not(:disabled) { background: var(--color-surface); border-color: var(--color-border-2); }
+.vibeBtn:disabled { opacity: 0.55; cursor: default; }
+.active { background: rgba(192,132,252,0.15) !important; border-color: var(--color-primary) !important; }
+.vibeCount { font-size: var(--text-xs); font-weight: 600; color: var(--color-text-2); }
