@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Navbar } from '@/components/layout/Navbar'
+import Navbar from '@/components/layout/Navbar'
 import { ToastContainer } from '@/components/ui/Toast'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
