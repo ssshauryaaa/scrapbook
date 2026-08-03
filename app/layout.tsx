@@ -5,7 +5,7 @@ import { NotificationProvider } from '@/contexts/NotificationContext'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Scrapbook — Your Digital Memory Wall',
+    default: 'Scrapbook',
     template: '%s · Scrapbook',
   },
   description:

@@ -21,7 +21,7 @@ export default function HomePage() {
         </Link>
         <div className={styles.navLinks}>
           <Link href="/login"  className={styles.navLink}>Sign In</Link>
-          <Link href="/signup" className={styles.navCta}>Get Started</Link>
+          <Link href="/login?mode=signup" className={styles.navCta}>Get Started</Link>
         </div>
       </nav>
 
@@ -41,7 +41,7 @@ export default function HomePage() {
           write real testimonials, and share moments that last forever.
         </p>
         <div className={styles.heroActions}>
-          <Link href="/signup" className={styles.ctaPrimary}>
+          <Link href="/login?mode=signup" className={styles.ctaPrimary}>
             Create Your Wall
           </Link>
           <Link href="/login" className={styles.ctaSecondary}>
@@ -101,7 +101,7 @@ export default function HomePage() {
       {/* CTA Banner */}
       <section className={styles.ctaBanner}>
         <h2 className={styles.ctaBannerTitle}>Ready to start your memory wall?</h2>
-        <Link href="/signup" className={styles.ctaPrimary}>Create Your Account — It&apos;s Free</Link>
+        <Link href="/login?mode=signup" className={styles.ctaPrimary}>Create Your Account — It&apos;s Free</Link>
       </section>
 
       <footer className={styles.footer}>
