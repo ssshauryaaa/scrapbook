@@ -33,6 +33,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Home, Compass, Bell, User, Menu, X, Plus } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const tokens = {
   color: {
@@ -59,10 +60,16 @@ const LINKS = [
 ];
 
 export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}) {
+  const { profile } = useAuth();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+
+  const profileHref = profile?.username ? `/${profile.username}` : "/profile";
+  const navLinks = LINKS.map((link) =>
+    link.href === "/profile" ? { ...link, href: profileHref } : link
+  );
 
   // Optimistic active-link state: updates the instant a link is clicked so
   // the pill starts sliding right away, instead of waiting for the route
@@ -149,7 +156,7 @@ export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}
 
           {/* desktop links */}
           <ul className="hidden md:flex items-center gap-1 relative">
-            {LINKS.map((link) => {
+            {navLinks.map((link) => {
               const active = activeHref === link.href;
               const Icon = link.icon;
               return (
@@ -238,7 +245,7 @@ export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}
             />
 
             <ul className="flex flex-col p-2">
-              {LINKS.map((link, i) => {
+              {navLinks.map((link, i) => {
                 const active = activeHref === link.href;
                 const Icon = link.icon;
                 return (
@@ -282,7 +289,7 @@ export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}
               <motion.li
                 initial={reducedMotion ? false : { opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: reducedMotion ? 0 : LINKS.length * 0.05 }}
+                transition={{ delay: reducedMotion ? 0 : navLinks.length * 0.05 }}
                 className="pt-1 mt-1 border-t"
                 style={{ borderColor: "#E4E0D3" }}
               >

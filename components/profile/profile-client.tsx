@@ -11,6 +11,7 @@
  * -----------------------------------------------------------------------
  */
 
+import { useRippleExit } from "@/components/profile/ripple-nav";
 import { useEffect, useRef, useState } from "react";
 import {
     useMotionValue,
@@ -68,6 +69,7 @@ export default function ProfileClient({
      * decorative placeholder derived from wall activity if not supplied. */
     visitCount?: number;
 }) {
+    const { trigger: exitToSettings, overlay: rippleOverlay } = useRippleExit();
     const supabase = useRef(createClient()).current;
     const theme = resolveTheme(profile.theme);
     const [tab, setTab] = useState<"wall" | "testimonials">("wall");
@@ -354,6 +356,7 @@ export default function ProfileClient({
                         {isOwnProfile ? (
                             <motion.button
                                 whileTap={{ scale: 0.96 }}
+                                onClick={(e) => exitToSettings(e, `/${profile.username}/edit`, theme.primary)}
                                 className="group/edit inline-grid grid-cols-[auto_0fr] hover:grid-cols-[auto_1fr] transition-[grid-template-columns] duration-300 ease-out items-center rounded-full border overflow-hidden"
                                 style={{ borderColor: "#E4E0D3", color: tokens.color.ink, background: "#fff" }}
                                 aria-label="Edit profile"
@@ -430,6 +433,7 @@ export default function ProfileClient({
                     </aside>
                 </div>
             </div>
+            {rippleOverlay}
         </div>
     );
 }
