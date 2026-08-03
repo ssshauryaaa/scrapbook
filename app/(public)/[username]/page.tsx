@@ -17,7 +17,7 @@ export default async function ProfilePage({
   } = await supabase.auth.getUser();
 
   // 1. profile + theme
-  const { data: profile, error: profileError } = await supabase
+  const { data: rawProfile, error: profileError } = await supabase
     .from("profiles")
     .select(
       `
@@ -27,6 +27,7 @@ export default async function ProfilePage({
     )
     .eq("username", username.toLowerCase())
     .single();
+  const profile = rawProfile as any;
 
   if (profileError || !profile) {
     console.error("Profile not found or error:", { username, profileError, profile });
@@ -60,16 +61,16 @@ export default async function ProfilePage({
     .order("approved_at", { ascending: false });
 
   // 4. mutual visitors (only returns results when both parties opted in)
-  const { data: mutualVisitors } = await supabase.rpc("get_mutual_visitors", {
+  const { data: mutualVisitors } = await (supabase as any).rpc("get_mutual_visitors", {
     user_id: profile.id,
   });
 
   // 5. log this visit + fetch real view count (fire-and-forget for the log)
   if (user && user.id !== profile.id) {
     // non-blocking: we don't await this
-    supabase.rpc("log_profile_visit", { visited_id: profile.id });
+    (supabase as any).rpc("log_profile_visit", { visited_id: profile.id });
   }
-  const { data: visitCountData } = await supabase.rpc("get_profile_visit_count", {
+  const { data: visitCountData } = await (supabase as any).rpc("get_profile_visit_count", {
     p_visited_id: profile.id,
   });
   const visitCount = (visitCountData as number | null) ?? 0;

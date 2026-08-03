@@ -89,7 +89,7 @@ export default function ScrapWall({
         e.preventDefault();
         if (!draft.trim() || sending) return;
         setSending(true);
-        const { data, error } = await supabase.from("scraps").insert({
+        const { data, error } = await (supabase as any).from("scraps").insert({
             author_id: currentUserId,
             recipient_id: recipientId,
             type: "text",

@@ -80,7 +80,7 @@ export default function ProfileClient({
     // fire-and-forget visit log — the RPC itself safely no-ops for self-visits
     useEffect(() => {
         if (!isOwnProfile) {
-            supabase.rpc("log_profile_visit", { visited_id: profile.id });
+            (supabase as any).rpc("log_profile_visit", { visited_id: profile.id });
         }
     }, [profile.id, isOwnProfile, supabase]);
 
