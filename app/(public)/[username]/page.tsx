@@ -78,8 +78,8 @@ export default async function ProfilePage({
   return (
     <ProfileClient
       profile={profile}
-      scraps={scraps || []}
-      testimonials={testimonials || []}
+      scraps={(scraps as any) || []}
+      testimonials={(testimonials as any) || []}
       mutualVisitors={mutualVisitors || []}
       currentUserId={user?.id ?? null}
       isOwnProfile={user?.id === profile.id}

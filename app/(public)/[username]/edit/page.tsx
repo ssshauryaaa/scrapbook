@@ -195,6 +195,7 @@ export default function EditProfilePage() {
     avatarDirty;
 
   function handleGoToProfile(e: React.MouseEvent) {
+    if (!profile) return;
     if (isDirty) {
       goProfileControls.start({ x: [0, -8, 8, -8, 8, 0], transition: { duration: 0.4 } });
       setWarnUnsaved(true);

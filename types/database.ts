@@ -11,7 +11,7 @@ export type VibeType = 'funny' | 'wholesome' | 'unhinged' | 'iconic'
 export type CommunityRole = 'member' | 'moderator' | 'owner'
 
 // ---- Palette shape stored in themes.palette ----
-export interface ThemePalette {
+export type ThemePalette = {
   background: string
   primary: string
   secondary: string
@@ -24,7 +24,7 @@ export interface ThemePalette {
 // Table row shapes
 // ============================================================
 
-export interface Profile {
+export type Profile = {
   id: string
   username: string
   display_name: string | null
@@ -36,7 +36,7 @@ export interface Profile {
   created_at: string
 }
 
-export interface Theme {
+export type Theme = {
   id: string
   owner_id: string | null
   name: string
@@ -46,7 +46,7 @@ export interface Theme {
   created_at: string
 }
 
-export interface Friendship {
+export type Friendship = {
   id: string
   requester_id: string
   addressee_id: string
@@ -54,7 +54,7 @@ export interface Friendship {
   created_at: string
 }
 
-export interface Scrap {
+export type Scrap = {
   id: string
   author_id: string
   recipient_id: string
@@ -67,7 +67,7 @@ export interface Scrap {
   created_at: string
 }
 
-export interface Testimonial {
+export type Testimonial = {
   id: string
   author_id: string
   recipient_id: string
@@ -79,7 +79,7 @@ export interface Testimonial {
   approved_at?: string | null
 }
 
-export interface Reaction {
+export type Reaction = {
   id: string
   scrap_id?: string | null
   testimonial_id?: string | null
@@ -87,7 +87,7 @@ export interface Reaction {
   vibe: VibeType
 }
 
-export interface Community {
+export type Community = {
   id: string
   name: string
   description?: string | null
@@ -96,14 +96,14 @@ export interface Community {
   created_at: string
 }
 
-export interface CommunityMember {
+export type CommunityMember = {
   community_id: string
   user_id: string
   role?: CommunityRole
   joined_at?: string
 }
 
-export interface CommunityPost {
+export type CommunityPost = {
   id: string
   community_id: string
   author_id: string
@@ -112,14 +112,14 @@ export interface CommunityPost {
   created_at: string
 }
 
-export interface ProfileVisit {
+export type ProfileVisit = {
   id: string
   visitor_id: string
   visited_id: string
   created_at: string
 }
 
-export interface Notification {
+export type Notification = {
   id: string
   user_id: string
   type: NotificationType
@@ -149,7 +149,7 @@ export type NotificationPayload =
 // RPC return types
 // ============================================================
 
-export interface OnThisDayScrap {
+export type OnThisDayScrap = {
   id: string
   author_id: string
   author_display_name: string
@@ -160,7 +160,7 @@ export interface OnThisDayScrap {
   years_ago: number
 }
 
-export interface MutualVisitor {
+export type MutualVisitor = {
   visitor_id: string
   visitor_display_name: string
   visitor_avatar_url: string | null
@@ -174,17 +174,17 @@ export interface MutualVisitor {
 export type Database = {
   public: {
     Tables: {
-      profiles: { Row: Profile; Insert: Omit<Profile, 'created_at'>; Update: Partial<Profile> }
-      themes: { Row: Theme; Insert: Omit<Theme, 'created_at'>; Update: Partial<Theme> }
-      friendships: { Row: Friendship; Insert: Omit<Friendship, 'id' | 'created_at'>; Update: Partial<Friendship> }
-      scraps: { Row: Scrap; Insert: Omit<Scrap, 'id' | 'created_at'>; Update: Partial<Scrap> }
-      testimonials: { Row: Testimonial; Insert: Omit<Testimonial, 'id' | 'created_at' | 'approved_at'>; Update: Partial<Testimonial> }
-      reactions: { Row: Reaction; Insert: Omit<Reaction, 'id'>; Update: Partial<Reaction> }
-      communities: { Row: Community; Insert: Omit<Community, 'id' | 'created_at'>; Update: Partial<Community> }
-      community_members: { Row: CommunityMember; Insert: Omit<CommunityMember, 'joined_at'> & { joined_at?: string }; Update: Partial<CommunityMember> }
-      community_posts: { Row: CommunityPost; Insert: Omit<CommunityPost, 'id' | 'created_at'>; Update: Partial<CommunityPost> }
-      profile_visits: { Row: ProfileVisit; Insert: Omit<ProfileVisit, 'id' | 'created_at'>; Update: never }
-      notifications: { Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>; Update: Partial<Notification> }
+      profiles: { Row: Profile; Insert: Omit<Profile, 'created_at'>; Update: Partial<Profile>; Relationships: any[] }
+      themes: { Row: Theme; Insert: Omit<Theme, 'created_at'>; Update: Partial<Theme>; Relationships: any[] }
+      friendships: { Row: Friendship; Insert: Omit<Friendship, 'id' | 'created_at'>; Update: Partial<Friendship>; Relationships: any[] }
+      scraps: { Row: Scrap; Insert: Omit<Scrap, 'id' | 'created_at'>; Update: Partial<Scrap>; Relationships: any[] }
+      testimonials: { Row: Testimonial; Insert: Omit<Testimonial, 'id' | 'created_at' | 'approved_at'>; Update: Partial<Testimonial>; Relationships: any[] }
+      reactions: { Row: Reaction; Insert: Omit<Reaction, 'id'>; Update: Partial<Reaction>; Relationships: any[] }
+      communities: { Row: Community; Insert: Omit<Community, 'id' | 'created_at'>; Update: Partial<Community>; Relationships: any[] }
+      community_members: { Row: CommunityMember; Insert: Omit<CommunityMember, 'joined_at'> & { joined_at?: string }; Update: Partial<CommunityMember>; Relationships: any[] }
+      community_posts: { Row: CommunityPost; Insert: Omit<CommunityPost, 'id' | 'created_at'>; Update: Partial<CommunityPost>; Relationships: any[] }
+      profile_visits: { Row: ProfileVisit; Insert: Omit<ProfileVisit, 'id' | 'created_at'>; Update: never; Relationships: any[] }
+      notifications: { Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>; Update: Partial<Notification>; Relationships: any[] }
     }
     Functions: {
       log_profile_visit: { Args: { visited_id: string }; Returns: void }
@@ -193,6 +193,15 @@ export type Database = {
       decline_testimonial: { Args: { testimonial_id: string }; Returns: { success: boolean } }
       get_on_this_day: { Args: { user_id: string }; Returns: OnThisDayScrap[] }
       get_mutual_visitors: { Args: { user_id: string }; Returns: MutualVisitor[] }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }
