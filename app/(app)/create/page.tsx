@@ -1,7 +1,7 @@
 import CreateHub from "@/components/create/CreateHub";
 
 export const metadata = {
-  title: "Create | Scrapbook",
+  title: "Create",
   description: "Create a scrap, testimonial, community, or community post on Scrapbook.",
 };
 
