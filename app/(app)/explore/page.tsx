@@ -1,26 +1,14 @@
 "use client";
 
 /**
- * Scrapbook — explore selector (v5: notebook cards + living background)
+ * Scrapbook — explore selector (v6: notebook cards + living background + peek-inside teasers)
  * -----------------------------------------------------------------------
- * Same crack-and-split transition as before. Two additions on top:
- *
- *   1. Cards are styled like little spiral notebooks — stacked pages
- *      behind the cover, a punched-hole spiral binding along the top
- *      edge, ruled lines peeking at the bottom, a dog-ear fold, and a
- *      taped-on paper label carrying the icon + title.
- *
- *   2. The background borrows the login page's living-scrapbook feel:
- *      paper grain, blurred ambient blobs with cursor parallax, a
- *      dashed spinning ring + squiggle doodle, a couple of draggable
- *      stickers, and click-anywhere sparkles. Everything decorative is
- *      hidden on small screens and respects prefers-reduced-motion.
- *
- * Responsiveness: the card fan is wrapped in a single CSS `scale()` that
- * shrinks at each breakpoint — because scale operates on the whole
- * coordinate space, the cards' absolute x-offsets shrink proportionally
- * too, so nothing overflows narrow viewports without touching the fan
- * math itself.
+ * Same crack-and-split transition as before. On top of v5's notebook-card
+ * styling and living background, this adds a "peek inside" section below
+ * the fan: for each notebook, a short themed teaser row (not the real
+ * PeopleList / ScrapsList / CommunitiesList — just enough flavor, in each
+ * notebook's own visual language, to invite scrolling down and clicking
+ * through) plus an "open the notebook" link into the real page.
  * -----------------------------------------------------------------------
  */
 
@@ -33,7 +21,7 @@ import {
     useSpring,
 } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Users, Sticker, LayoutGrid } from "lucide-react";
+import { Users, Sticker, LayoutGrid, Ticket } from "lucide-react";
 import { tokens } from "@/lib/scrapbook-theme";
 
 // a couple of brand-palette colors used only for background flourishes
@@ -46,6 +34,14 @@ const CARD_META: Record<CardKey, { title: string; teaser: string; navLabel: stri
     people: { title: "people", teaser: "faces you haven't met yet", navLabel: "the people page", color: tokens.color.periwinkle, icon: <Users size={22} />, href: "/explore/people" },
     scraps: { title: "fresh off the wall", teaser: "recent scraps from around scrapbook", navLabel: "the scraps wall", color: tokens.color.amber, icon: <Sticker size={22} />, href: "/explore/scraps" },
     communities: { title: "communities", teaser: "find your people", navLabel: "communities", color: tokens.color.mint, icon: <LayoutGrid size={22} />, href: "/explore/communities" },
+};
+
+// generic, non-specific flavor lines for the peek-inside teasers — deliberately
+// not real profiles/scraps/communities, just enough texture per notebook
+const PREVIEW_ITEMS: Record<CardKey, string[]> = {
+    people: ["someone new joined today", "say the first hi", "a face you haven't seen yet"],
+    scraps: ["a quick hello, pinned up", "something silly, left behind", "a little note for someone"],
+    communities: ["a group finding its people", "shared interests, one thread", "a table with room for one more"],
 };
 
 const FAN: Record<CardKey, { x: number; rotateZ: number; scale: number; zIndex: number }> = {
@@ -96,6 +92,118 @@ function pointsToPath(points: { x: number; y: number }[]) {
 }
 function pointsToPolygonAttr(points: { x: number; y: number }[]) {
     return points.map((p) => `${p.x}% ${p.y}%`).join(", ");
+}
+
+/** Small mini-card matching each notebook's established visual language, used only for the peek-inside teasers. */
+function PreviewTile({ type, color, text, tileIndex }: { type: CardKey; color: string; text: string; tileIndex: number }) {
+    if (type === "people") {
+        return (
+            <div
+                className="relative rounded-lg border overflow-hidden shrink-0 w-[168px] sm:w-[188px] pt-4 pb-3 px-3"
+                style={{
+                    background: "#FBF7EC",
+                    borderColor: "#DCD3B8",
+                    backgroundImage: "repeating-linear-gradient(to bottom, transparent, transparent 15px, rgba(60,50,30,0.06) 16px)",
+                }}
+            >
+                <div className="absolute top-0 left-0 right-0 h-3 flex items-center justify-evenly px-3" style={{ background: "#F1E9D2" }}>
+                    {Array.from({ length: 5 }).map((_, h) => (
+                        <span key={h} className="rounded-full" style={{ width: 4, height: 4, background: "#FBF7EC", border: "1px solid #C9BE9C" }} />
+                    ))}
+                </div>
+                <div className="absolute left-6 top-3 bottom-0 w-px" style={{ background: "rgba(214,92,79,0.3)" }} />
+                <div className="flex items-center gap-2 mt-1">
+                    <span className="rounded-full flex items-center justify-center text-white shrink-0" style={{ width: 22, height: 22, background: color }}>
+                        <Users size={11} />
+                    </span>
+                    <p className="text-[11.5px] leading-snug" style={{ color: tokens.color.ink }}>
+                        {text}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    if (type === "scraps") {
+        const stocks = ["#FEFCF6", "#FFF6D8", "#EAF6EF"];
+        return (
+            <div
+                className="relative shrink-0 w-[168px] sm:w-[188px] pt-4 px-3 pb-4"
+                style={{
+                    background: stocks[tileIndex % stocks.length],
+                    clipPath: "polygon(0% 0%,100% 0%,100% 91%,90% 97%,80% 92%,70% 98%,60% 93%,50% 99%,40% 94%,30% 98%,20% 93%,10% 99%,0% 94%)",
+                    boxShadow: "0 4px 10px rgba(43,42,40,0.08)",
+                }}
+            >
+                <span
+                    className="absolute left-1/2 -top-1 -translate-x-1/2 rounded-full"
+                    style={{ width: 8, height: 8, background: `radial-gradient(circle at 35% 30%, #fff8, ${color})`, boxShadow: "0 2px 3px rgba(0,0,0,0.3)" }}
+                />
+                <p className="text-[11.5px] leading-snug mt-1" style={{ color: tokens.color.ink, fontFamily: tokens.font.display }}>
+                    {text}
+                </p>
+            </div>
+        );
+    }
+
+    // communities — mini ticket stub
+    return (
+        <div className="relative shrink-0 w-[188px] sm:w-[208px] rounded-lg border overflow-hidden flex" style={{ background: "#fff", borderColor: "#E4E0D3" }}>
+            <div className="flex-1 min-w-0 px-3 py-2.5">
+                <p className="text-[11.5px] leading-snug" style={{ color: tokens.color.ink }}>
+                    {text}
+                </p>
+            </div>
+            <div className="relative w-0 shrink-0">
+                <div className="absolute inset-y-1.5 left-0 border-l-2 border-dashed" style={{ borderColor: "#D8D0BA" }} />
+            </div>
+            <div className="w-9 shrink-0 flex items-center justify-center" style={{ background: `${color}18` }}>
+                <Ticket size={13} style={{ color, opacity: 0.7 }} />
+            </div>
+        </div>
+    );
+}
+
+function PreviewRow({ cardKey, opening }: { cardKey: CardKey; opening: CardKey | null }) {
+    const router = useRouter();
+    const meta = CARD_META[cardKey];
+    const items = PREVIEW_ITEMS[cardKey];
+
+    return (
+        <motion.div
+            data-no-sparkle
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ duration: 0.5, ease: EASE_SPLIT }}
+            className="mb-9 last:mb-0"
+        >
+            <div className="flex items-center justify-between mb-3 px-0.5">
+                <div className="flex items-center gap-2.5">
+                    <span className="rounded-full flex items-center justify-center" style={{ width: 30, height: 30, background: `${meta.color}22`, color: meta.color }}>
+                        {meta.icon}
+                    </span>
+                    <p className="text-sm sm:text-base" style={{ fontFamily: tokens.font.display, fontWeight: 700, color: tokens.color.ink }}>
+                        {meta.title}
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => opening === null && router.push(meta.href)}
+                    className="text-xs font-medium hover:opacity-70 transition-opacity whitespace-nowrap"
+                    style={{ color: meta.color }}
+                >
+                    open the notebook →
+                </button>
+            </div>
+
+            <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
+                {items.map((text, idx) => (
+                    <PreviewTile key={idx} type={cardKey} color={meta.color} text={text} tileIndex={idx} />
+                ))}
+            </div>
+        </motion.div>
+    );
 }
 
 export default function ExplorePage() {
@@ -227,7 +335,7 @@ export default function ExplorePage() {
                 </svg>
             </motion.div>
 
-            <style>{`@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+            <style>{`@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .scrollbar-none::-webkit-scrollbar { display: none; } .scrollbar-none { scrollbar-width: none; }`}</style>
 
             {/* draggable stickers */}
             {!prefersReducedMotion &&
@@ -381,6 +489,16 @@ export default function ExplorePage() {
                             </motion.div>
                         );
                     })}
+                </div>
+
+                {/* peek-inside teasers — themed per notebook, generic content, links out to the real pages */}
+                <div className="relative mt-6 sm:mt-10 pt-8 sm:pt-10" style={{ borderTop: `1px dashed ${tokens.color.ink}22` }}>
+                    <p data-no-sparkle className="text-xs uppercase tracking-widest text-center mb-7" style={{ color: tokens.color.inkSoft, letterSpacing: "0.14em" }}>
+                        a peek inside
+                    </p>
+                    {(Object.keys(CARD_META) as CardKey[]).map((key) => (
+                        <PreviewRow key={key} cardKey={key} opening={opening} />
+                    ))}
                 </div>
             </div>
 
