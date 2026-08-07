@@ -8,7 +8,7 @@
 
 export const tokens = {
   color: {
-    paper: "#FAF6EC",
+    paper: "#F7F2E3",
     paperDark: "#F0EADA",
     paperCard: "#FFFFFF",
     ink: "#2B2A28",

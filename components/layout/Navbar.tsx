@@ -37,7 +37,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const tokens = {
   color: {
-    paper: "#FAF6EC",
+    paper: "#F7F2E3",
     ink: "#2B2A28",
     inkSoft: "#6B6860",
     periwinkle: "#6C5CE7",
@@ -125,7 +125,7 @@ export default function Navbar({ noSpacer = false }: { noSpacer?: boolean } = {}
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="w-full rounded-full border flex items-center justify-between gap-2 px-3 sm:px-4"
           style={{
-            background: scrolled ? "rgba(250,246,236,0.82)" : tokens.color.paper,
+            background: scrolled ? "rgba(247,242,227,0.82)" : tokens.color.paper,
             backdropFilter: scrolled ? "blur(14px)" : "none",
             WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
             borderColor: "#E4E0D3",
